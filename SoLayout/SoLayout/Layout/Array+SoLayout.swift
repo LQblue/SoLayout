@@ -248,17 +248,15 @@ private extension Array where Element: ConstraintView {
             }
             previous = v
         }
-        guard let c = commonSuperview else {
-            assert(false,
-                   """
-                   \n\n***************************\n
-                   提示:    多个View不存在共同的Superview;
-                   Method: \(method);
-                   Views:  \(self);
-                   \n***************************\n\n
-                   """)
-        }
-        return c
+        assert(commonSuperview != nil,
+               """
+               \n\n***************************\n
+               提示:    多个View不存在共同的Superview;
+               Method: \(method);
+               Views:  \(self);
+               \n***************************\n\n
+               """)
+        return commonSuperview!
     }
     
     /// 检测`View`的数量

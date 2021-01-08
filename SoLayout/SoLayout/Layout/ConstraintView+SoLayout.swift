@@ -90,27 +90,27 @@ public extension SoWrapper where Base: ConstraintView {
     
 }
 
-public extension SoWrapper where Base: ConstraintView {
-    
-    func setContentCompressionResistancePriority(for axis: NSLayoutConstraint.Axis) {
-        assert(NSLayoutConstraint.isSettingPriority,
-               "\(#function) should only be called from within the action passed into the method SoPriority.setPriority(with:for:)")
-        if NSLayoutConstraint.isSettingPriority {
-            prepareLayout()
-            base.setContentCompressionResistancePriority(NSLayoutConstraint.currentPriority, for: axis)
-        }
-    }
-    
-    func setContentHuggingPriority(for axis: NSLayoutConstraint.Axis) {
-        assert(NSLayoutConstraint.isSettingPriority,
-               "\(#function) should only be called from within the action passed into the method SoPriority.setPriority(with:for:)")
-        if NSLayoutConstraint.isSettingPriority {
-            prepareLayout()
-            base.setContentHuggingPriority(NSLayoutConstraint.currentPriority, for: axis)
-        }
-    }
-    
-}
+//public extension SoWrapper where Base: ConstraintView {
+//    
+//    func setContentCompressionResistancePriority(for axis: NSLayoutConstraint.Axis) {
+//        assert(NSLayoutConstraint.isSettingPriority,
+//               "\(#function) should only be called from within the action passed into the method SoPriority.setPriority(with:for:)")
+//        if NSLayoutConstraint.isSettingPriority {
+//            prepareLayout()
+//            base.setContentCompressionResistancePriority(NSLayoutConstraint.currentPriority, for: axis)
+//        }
+//    }
+//    
+//    func setContentHuggingPriority(for axis: NSLayoutConstraint.Axis) {
+//        assert(NSLayoutConstraint.isSettingPriority,
+//               "\(#function) should only be called from within the action passed into the method SoPriority.setPriority(with:for:)")
+//        if NSLayoutConstraint.isSettingPriority {
+//            prepareLayout()
+//            base.setContentHuggingPriority(NSLayoutConstraint.currentPriority, for: axis)
+//        }
+//    }
+//    
+//}
 
 public extension SoWrapper where Base: ConstraintView {
     
@@ -130,15 +130,17 @@ public extension SoWrapper where Base: ConstraintView {
     @discardableResult
     func alignToSuperview(axis: Axis, margin: Bool = false) -> NSLayoutConstraint {
         let superview = base.checkSuperview(method: #function)
+        #if os(iOS)
         if margin {
             return layout(attribute: axis.marginAttribute, to: axis.marginAttribute, of: superview)
         }
+        #endif
         return layout(attribute: axis.attribute, to: axis.attribute, of: superview)
     }
     
     @discardableResult
     func align(axis: Axis,
-               to otherView: UIView,
+               to otherView: ConstraintView,
                offset: CGFloat = 0,
                multipilier: CGFloat = 1.0) -> NSLayoutConstraint {
         return layout(attribute: axis.attribute, to: axis.attribute, of: otherView, offset: offset, multipilier: multipilier)
@@ -176,9 +178,11 @@ public extension SoWrapper where Base: ConstraintView {
              offset: CGFloat = 0.0,
              relation: LayoutRelation = .equal,
              margin: Bool = false) -> NSLayoutConstraint {
+        #if os(iOS)
         if margin {
             return layout(attribute: edge.marginAttribute, to: otherEdge.marginAttribute, of: otherView, offset: offset, relation: relation)
         }
+        #endif
         return layout(attribute: edge.attribute, to: otherEdge.attribute, of: otherView, offset: offset, relation: relation)
     }
     
@@ -213,15 +217,15 @@ public extension SoWrapper where Base: ConstraintView {
      - parameter margin: 基于margin的布局方式，默认为`false`
      - returns: 创建的约束
      */
-    @discardableResult
-    func pinToSuperView(insets: ConstraintInsets = .zero, margin: Bool = false) -> [NSLayoutConstraint] {
-        var constraints = [NSLayoutConstraint]()
-        constraints.append(pinToSuperview(edge: .top, inset: insets.top, margin: margin))
-        constraints.append(pinToSuperview(edge: .leading, inset: insets.left, margin: margin))
-        constraints.append(pinToSuperview(edge: .bottom, inset: insets.bottom, margin: margin))
-        constraints.append(pinToSuperview(edge: .trailing, inset: insets.right, margin: margin))
-        return constraints
-    }
+//    @discardableResult
+//    func pinToSuperView(insets: ConstraintInsets = .zero, margin: Bool = false) -> [NSLayoutConstraint] {
+//        var constraints = [NSLayoutConstraint]()
+//        constraints.append(pinToSuperview(edge: .top, inset: insets.top, margin: margin))
+//        constraints.append(pinToSuperview(edge: .leading, inset: insets.left, margin: margin))
+//        constraints.append(pinToSuperview(edge: .bottom, inset: insets.bottom, margin: margin))
+//        constraints.append(pinToSuperview(edge: .trailing, inset: insets.right, margin: margin))
+//        return constraints
+//    }
     
     /**
      使`view`相对于`Superview`的`边界`进行布局
@@ -345,15 +349,15 @@ public extension SoWrapper where Base: ConstraintView {
      - parameter inset: 上下左右间距， 默认为 (0, 0, 0, 0)
      - returns: 创建的约束
      */
-    @discardableResult
-    func pinToSuperviewSafeArea(insets: ConstraintInsets = .zero) -> [NSLayoutConstraint] {
-        var constraints = [NSLayoutConstraint]()
-        constraints.append(pinToSuperviewSafeArea(edge: .top, inset: insets.top))
-        constraints.append(pinToSuperviewSafeArea(edge: .leading, inset: insets.left))
-        constraints.append(pinToSuperviewSafeArea(edge: .bottom, inset: insets.bottom))
-        constraints.append(pinToSuperviewSafeArea(edge: .trailing, inset: insets.right))
-        return constraints
-    }
+//    @discardableResult
+//    func pinToSuperviewSafeArea(insets: ConstraintInsets = .zero) -> [NSLayoutConstraint] {
+//        var constraints = [NSLayoutConstraint]()
+//        constraints.append(pinToSuperviewSafeArea(edge: .top, inset: insets.top))
+//        constraints.append(pinToSuperviewSafeArea(edge: .leading, inset: insets.left))
+//        constraints.append(pinToSuperviewSafeArea(edge: .bottom, inset: insets.bottom))
+//        constraints.append(pinToSuperviewSafeArea(edge: .trailing, inset: insets.right))
+//        return constraints
+//    }
     
     /**
      使`view`相对于`Superview`的安全区域`边界`进行布局
@@ -639,18 +643,16 @@ internal extension ConstraintView {
             }
             startView = startView?.superview
         } while startView != nil && superview != nil
-        guard let s = superview else {
-            assert(false,
-                   """
-                   \n\n***************************\n
-                   提示:       两个View需要有共同的Superview;
-                   Method:    \(method);
-                   View:      \(self);
-                   OtherView: \(otherView);
-                   \n***************************\n\n
-                   """)
-        }
-        return s
+//        assert(superview != nil,
+//               """
+//               \n\n***************************\n
+//               提示:       两个View需要有共同的Superview;
+//               Method:    \(method);
+//               View:      \(self);
+//               OtherView: \(otherView);
+//               \n***************************\n\n
+//               """)
+        return superview!
     }
     
     /// 检测是否存在  ` Superview `
@@ -658,17 +660,15 @@ internal extension ConstraintView {
     /// - Returns: `Superview`
     @discardableResult
     func checkSuperview(method: String) -> ConstraintView {
-        guard let superview = self.superview else {
-            assert(false,
-                   """
-                   \n\n***************************\n
-                   提示:       View的Superview不能为空;
-                   Method:    \(method);
-                   View:      \(self);
-                   \n***************************\n\n
-                   """)
-        }
-        return superview
+//        assert(superview != nil,
+//               """
+//               \n\n***************************\n
+//               提示:       View的Superview不能为空;
+//               Method:    \(method);
+//               View:      \(self);
+//               \n***************************\n\n
+//               """)
+        return superview!
     }
     
 }

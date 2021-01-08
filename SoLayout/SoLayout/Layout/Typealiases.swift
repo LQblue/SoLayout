@@ -13,13 +13,13 @@ import Foundation
 #endif
 
 #if os(iOS) || os(tvOS)
-#if swift(>=4.2)
+//#if swift(>=4.2)
     public typealias LayoutRelation = NSLayoutConstraint.Relation
     public typealias LayoutAttribute = NSLayoutConstraint.Attribute
-#else
-    public  typealias LayoutRelation = NSLayoutRelation
-    public typealias LayoutAttribute = NSLayoutAttribute
-#endif
+//#else
+//    public  typealias LayoutRelation = NSLayoutRelation
+//    public typealias LayoutAttribute = NSLayoutAttribute
+//#endif
     public typealias LayoutPriority = UILayoutPriority
 #else
     public typealias LayoutRelation = NSLayoutConstraint.Relation
@@ -67,6 +67,7 @@ public enum Axis {
         }
     }
     
+    #if os(iOS)
     var marginAttribute: LayoutAttribute {
         switch self {
         case .vertical:
@@ -78,6 +79,7 @@ public enum Axis {
             return .centerYWithinMargins
         }
     }
+    #endif
     
 }
 
@@ -107,6 +109,7 @@ public enum Edge {
         }
     }
     
+    #if os(iOS)
     var marginAttribute: LayoutAttribute {
         switch self {
         case .left:
@@ -123,6 +126,7 @@ public enum Edge {
             return .trailingMargin
         }
     }
+    #endif
     
 }
 
